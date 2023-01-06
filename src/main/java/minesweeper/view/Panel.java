@@ -1,4 +1,4 @@
-package minesweeper.frame;
+package minesweeper.view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -4,8 +4,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import minesweeper.board.Board;
-import minesweeper.frame.Frame;
-import minesweeper.frame.Panel;
+import minesweeper.view.Frame;
+import minesweeper.view.Panel;
+import minesweeper.view.View;
 
 public class Controller implements MouseListener {
     Board board;
@@ -14,13 +15,14 @@ public class Controller implements MouseListener {
         int rows = 20;
         int columns = 20;
 
-        new Controller(new Frame(rows, columns), new Board(rows, columns, 30));
+        Frame frame = new Frame(rows, columns);
+        new Controller(new View(frame), new Board(rows, columns, 30));
     }
 
-    private Controller(Frame frame, Board board) {
+    private Controller(View view, Board board) {
         this.board = board;
-        frame.getPanel().addMouseListener(this);
-        board.addPropertyChangeListener(frame);
+        view.getFrame().getPanel().addMouseListener(this);
+        board.addPropertyChangeListener(view);
     }
 
     @Override
