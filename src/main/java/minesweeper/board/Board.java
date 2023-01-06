@@ -75,6 +75,12 @@ public class Board {
     public void reveal(int row, int column) {
         /* Reveal an individual cell */
 
+        // If the cell is flagged, unflag and exit
+        if (knownCells[row][column] == Cell.FLAGGED) {
+            unflag(row, column);
+            return;
+        }
+
         // Determine cell contents
         Cell cell;
         if (mines[row][column]) cell = Cell.MINE;
@@ -115,6 +121,20 @@ public class Board {
             if (knownCells[row][column] == Cell.HIDDEN) reveal(row, column);
         }
     }
+
+    public void toggleFlag(int row, int column) {
+        if (knownCells[row][column] == Cell.HIDDEN) flag(row, column);
+        else if (knownCells[row][column] == Cell.FLAGGED) unflag(row, column);
+    }
+    private void flag(int row, int column) {
+        knownCells[row][column] = Cell.FLAGGED;
+        propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, Cell.FLAGGED);
+    }
+    private void unflag(int row, int column) {
+        knownCells[row][column] = Cell.HIDDEN;
+        propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.FLAGGED, Cell.HIDDEN);
+    }
+
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);

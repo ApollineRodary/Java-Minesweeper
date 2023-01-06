@@ -11,5 +11,6 @@ public enum Cell {
     NEIGHBORS_5,
     NEIGHBORS_6,
     NEIGHBORS_7,
-    NEIGHBORS_8
+    NEIGHBORS_8,
+    FLAGGED
 }

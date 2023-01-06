@@ -36,7 +36,16 @@ public class Controller implements MouseListener {
     public void mousePressed(MouseEvent e) {
         int row = e.getY() / Panel.CELL_HEIGHT;
         int column = e.getX() / Panel.CELL_WIDTH;
-        board.reveal(row, column);
+
+        switch (e.getButton()) {
+            case MouseEvent.BUTTON1:
+                board.reveal(row, column);
+                break;
+            
+            case MouseEvent.BUTTON3:
+                board.toggleFlag(row, column);
+                break;
+        }
     }
 
     @Override

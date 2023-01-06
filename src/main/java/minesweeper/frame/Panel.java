@@ -37,7 +37,8 @@ public class Panel extends JPanel {
         Map.entry(Cell.NEIGHBORS_6, loadImage("textures/cell/6_neighbors.png")),
         Map.entry(Cell.NEIGHBORS_7, loadImage("textures/cell/7_neighbors.png")),
         Map.entry(Cell.NEIGHBORS_8, loadImage("textures/cell/8_neighbors.png")),
-        Map.entry(Cell.HIDDEN, loadImage("textures/cell/hidden.png"))
+        Map.entry(Cell.HIDDEN, loadImage("textures/cell/hidden.png")),
+        Map.entry(Cell.FLAGGED, loadImage("textures/cell/flagged.png"))
     );
 
     public Panel(int rows, int columns) {
