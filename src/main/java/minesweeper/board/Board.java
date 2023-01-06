@@ -73,12 +73,47 @@ public class Board {
     }
     
     public void reveal(int row, int column) {
+        /* Reveal an individual cell */
+
+        // Determine cell contents
         Cell cell;
         if (mines[row][column]) cell = Cell.MINE;
         else cell = COUNT_TO_CONTENTS[adjacentMineCount[row][column]];
-
+        
+        // Update known cell contents
         knownCells[row][column] = cell;
+        
+        // Notify frame
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, cell);
+
+        // If the current cell is not a mine and has no adjacent mines, reveal adjacent cells
+        if (cell==Cell.NEIGHBORS_0) revealNeighbors(row, column);
+    }
+
+    private void revealNeighbors(int row, int column) {
+        /* Reveal cells adjacent to the current cell */
+
+        // Get list of positions of adjacent cells
+        List <int[]> neighborPositions = new ArrayList<>();
+        if (row>0) {
+            if (column>0) neighborPositions.add(new int[]{row-1, column-1});
+            neighborPositions.add(new int[]{row-1, column});
+            if (column<columns-1) neighborPositions.add(new int[]{row-1, column+1});
+        }
+        if (column>0) neighborPositions.add(new int[]{row, column-1});
+        if (column<columns-1) neighborPositions.add(new int[]{row, column+1});
+        if (row<rows-1) {
+            if (column>0) neighborPositions.add(new int[]{row+1, column-1});
+            neighborPositions.add(new int[]{row+1, column});
+            if (column<columns-1) neighborPositions.add(new int[]{row+1, column+1});
+        }
+
+        // For each adjacent cell that is hidden, reveal it
+        for (int[] neighborPosition: neighborPositions) {
+            row = neighborPosition[0];
+            column = neighborPosition[1];
+            if (knownCells[row][column] == Cell.HIDDEN) reveal(row, column);
+        }
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
