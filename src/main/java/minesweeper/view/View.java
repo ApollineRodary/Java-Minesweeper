@@ -4,7 +4,7 @@ import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import minesweeper.board.Cell;
+import minesweeper.model.Cell;
 
 public class View implements PropertyChangeListener {
     private Frame frame;

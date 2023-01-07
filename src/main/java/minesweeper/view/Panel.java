@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import minesweeper.board.Cell;
+import minesweeper.model.Cell;
 
 public class Panel extends JPanel {
     public static final int CELL_WIDTH = 25;

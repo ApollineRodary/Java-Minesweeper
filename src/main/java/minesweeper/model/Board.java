@@ -1,4 +1,4 @@
-package minesweeper.board;
+package minesweeper.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

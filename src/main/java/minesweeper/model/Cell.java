@@ -1,4 +1,4 @@
-package minesweeper.board;
+package minesweeper.model;
 
 public enum Cell {
     HIDDEN,

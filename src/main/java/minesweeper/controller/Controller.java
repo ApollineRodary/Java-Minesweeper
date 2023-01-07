@@ -3,26 +3,29 @@ package minesweeper.controller;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import minesweeper.board.Board;
+import minesweeper.model.Board;
+import minesweeper.model.Model;
 import minesweeper.view.Frame;
 import minesweeper.view.Panel;
 import minesweeper.view.View;
 
 public class Controller implements MouseListener {
-    Board board;
+    Model model;
 
     public static void start() {
         int rows = 20;
         int columns = 20;
+        int mines = 30;
 
         Frame frame = new Frame(rows, columns);
-        new Controller(new View(frame), new Board(rows, columns, 30));
+        Board board = new Board(rows, columns, mines);
+        new Controller(new View(frame), new Model(board));
     }
 
-    private Controller(View view, Board board) {
-        this.board = board;
+    private Controller(View view, Model model) {
+        this.model = model;
         view.getFrame().getPanel().addMouseListener(this);
-        board.addPropertyChangeListener(view);
+        model.getBoard().addPropertyChangeListener(view);
     }
 
     @Override
@@ -41,11 +44,11 @@ public class Controller implements MouseListener {
 
         switch (e.getButton()) {
             case MouseEvent.BUTTON1:
-                board.reveal(row, column);
+                model.getBoard().reveal(row, column);
                 break;
             
             case MouseEvent.BUTTON3:
-                board.toggleFlag(row, column);
+                model.getBoard().toggleFlag(row, column);
                 break;
         }
     }
