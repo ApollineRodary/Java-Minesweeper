@@ -31,6 +31,7 @@ public class Panel extends JPanel {
         this.contents[row][column] = contents;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (int i=0; i<contents.length; i++) {

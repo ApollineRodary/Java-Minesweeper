@@ -16,6 +16,7 @@ public class Board {
     private final int[][] adjacentMineCount;
     public final int rows;
     public final int columns;
+    private int minesRemaining;
 
     public Board(int rows, int columns, int mines) {
         propertyChangeSupport = new PropertyChangeSupport(this);
@@ -46,6 +47,7 @@ public class Board {
             int column = minePosition[1];
             this.mines[row][column] = true;
         }
+        setMinesRemaining(mines);
 
         // Count neighbors for each cell
         adjacentMineCount = new int[rows][columns];
@@ -133,11 +135,18 @@ public class Board {
     private void flag(int row, int column) {
         knownCells[row][column] = Cell.FLAGGED;
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, Cell.FLAGGED);
+        setMinesRemaining(minesRemaining-1);
     }
     
     private void unflag(int row, int column) {
         knownCells[row][column] = Cell.HIDDEN;
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.FLAGGED, Cell.HIDDEN);
+        setMinesRemaining(minesRemaining+1);
+    }
+
+    private void setMinesRemaining(int n) {
+        propertyChangeSupport.firePropertyChange("minesRemaining", minesRemaining, n);
+        minesRemaining = n;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

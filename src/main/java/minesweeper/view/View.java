@@ -18,22 +18,30 @@ public class View implements PropertyChangeListener {
     
     @Override
     public void propertyChange(PropertyChangeEvent e) {
-        IndexedPropertyChangeEvent ei = (IndexedPropertyChangeEvent) e;
-        frame.getPanel().setContents((Cell) e.getNewValue(), ei.getIndex());
-        frame.getPanel().repaint();
-
-        switch ((Cell) e.getNewValue()) {
-            case MINE:
-                SoundMixer.playSound(SoundEvent.REVEALED_MINE);
+        switch (e.getPropertyName()) {
+            case "knownCells":
+                IndexedPropertyChangeEvent ei = (IndexedPropertyChangeEvent) e;
+                frame.getPanel().setContents((Cell) e.getNewValue(), ei.getIndex());
+                frame.getPanel().repaint();
+        
+                switch ((Cell) e.getNewValue()) {
+                    case MINE:
+                        SoundMixer.playSound(SoundEvent.REVEALED_MINE);
+                        break;
+                    case FLAGGED:
+                        SoundMixer.playSound(SoundEvent.PLACED_FLAG);
+                        break;
+                    case HIDDEN:
+                        SoundMixer.playSound(SoundEvent.REMOVED_FLAG);
+                        break;
+                    default:
+                        SoundMixer.playSound(SoundEvent.REVEALED_CELL);
+                        break;
+                }
                 break;
-            case FLAGGED:
-                SoundMixer.playSound(SoundEvent.PLACED_FLAG);
-                break;
-            case HIDDEN:
-                SoundMixer.playSound(SoundEvent.REMOVED_FLAG);
-                break;
-            default:
-                SoundMixer.playSound(SoundEvent.REVEALED_CELL);
+            
+            case "minesRemaining":
+                frame.getMineCounter().setValue((int) e.getNewValue());
                 break;
         }
     }
