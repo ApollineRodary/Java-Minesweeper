@@ -24,11 +24,14 @@ public class ImageLibrary {
         Map.entry(Cell.NEIGHBORS_7, loadImage("textures/cell/7_neighbors.png").getScaledInstance(Panel.CELL_WIDTH, Panel.CELL_HEIGHT, Image.SCALE_FAST)),
         Map.entry(Cell.NEIGHBORS_8, loadImage("textures/cell/8_neighbors.png").getScaledInstance(Panel.CELL_WIDTH, Panel.CELL_HEIGHT, Image.SCALE_FAST)),
         Map.entry(Cell.HIDDEN, loadImage("textures/cell/hidden.png").getScaledInstance(Panel.CELL_WIDTH, Panel.CELL_HEIGHT, Image.SCALE_FAST)),
-        Map.entry(Cell.FLAGGED, loadImage("textures/cell/flagged.png").getScaledInstance(Panel.CELL_WIDTH, Panel.CELL_HEIGHT, Image.SCALE_FAST))
+        Map.entry(Cell.FLAGGED, loadImage("textures/cell/flagged.png").getScaledInstance(Panel.CELL_WIDTH, Panel.CELL_HEIGHT, Image.SCALE_FAST)),
+        Map.entry(Cell.FALSE_FLAG, loadImage("textures/cell/false_flag.png").getScaledInstance(Panel.CELL_WIDTH, Panel.CELL_HEIGHT, Image.SCALE_FAST))
     );
 
     private static final Map<String, Image> IMAGES = Map.ofEntries(
-        Map.entry("restart_button", loadImage("textures/ui/restart_button.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST))
+        Map.entry("restart_button", loadImage("textures/ui/restart_button.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST)),
+        Map.entry("restart_button_defeat", loadImage("textures/ui/restart_button_defeat.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST)),
+        Map.entry("restart_button_victory", loadImage("textures/ui/restart_button_victory.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST))
     );
 
     private static final Map<Integer, Image> NUM_IMAGES = Map.ofEntries(

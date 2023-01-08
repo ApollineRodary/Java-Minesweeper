@@ -5,6 +5,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import minesweeper.model.Cell;
+import minesweeper.model.GameState;
 
 public class View implements PropertyChangeListener {
     private Frame frame;
@@ -42,6 +43,10 @@ public class View implements PropertyChangeListener {
             
             case "minesRemaining":
                 frame.getMineCounter().setValue((int) e.getNewValue());
+                break;
+            
+            case "gameState":
+                frame.getRestartButton().updateIcon((GameState) e.getNewValue());
                 break;
         }
     }

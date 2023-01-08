@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import minesweeper.model.GameState;
 import minesweeper.model.Model;
 import minesweeper.view.Frame;
 import minesweeper.view.Panel;
@@ -21,17 +22,15 @@ public class Controller implements MouseListener, ActionListener {
     public static void start() {
         View view = new View(new Frame(rows, columns));
         Model model = new Model();
-        model.startGame(rows, columns, mines);
-
         new Controller(view, model);
     }
 
     private Controller(View view, Model model) {
         this.model = model;
         this.view = view;
+        model.startGame(rows, columns, mines, view);
         view.getFrame().getPanel().addMouseListener(this);
         view.getFrame().getRestartButton().addActionListener(this);
-        model.getBoard().addPropertyChangeListener(view);
     }
 
     @Override
@@ -45,16 +44,20 @@ public class Controller implements MouseListener, ActionListener {
     
     @Override
     public void mousePressed(MouseEvent e) {
+        if (model.getBoard().getGameState() != GameState.IN_GAME) return;
+
         int row = e.getY() / Panel.CELL_HEIGHT;
         int column = e.getX() / Panel.CELL_WIDTH;
 
         switch (e.getButton()) {
             case MouseEvent.BUTTON1:
                 model.getBoard().reveal(row, column);
+                model.getBoard().checkVictory();
                 break;
             
             case MouseEvent.BUTTON3:
                 model.getBoard().toggleFlag(row, column);
+                model.getBoard().checkVictory();
                 break;
         }
     }
@@ -65,8 +68,7 @@ public class Controller implements MouseListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.getFrame().getRestartButton()) {
-            model.startGame(rows, columns, mines);
-            model.getBoard().addPropertyChangeListener(view);
+            model.startGame(rows, columns, mines, view);
             view.getFrame().getPanel().reset();
         }
     }

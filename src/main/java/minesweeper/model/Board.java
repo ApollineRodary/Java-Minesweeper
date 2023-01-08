@@ -16,11 +16,13 @@ public class Board {
     private final int[][] adjacentMineCount;
     public final int rows;
     public final int columns;
+    private GameState gameState;
     private int minesRemaining;
 
-    public Board(int rows, int columns, int mines) {
+    public Board(int rows, int columns, int mines, PropertyChangeListener listener) {
         propertyChangeSupport = new PropertyChangeSupport(this);
-
+        propertyChangeSupport.addPropertyChangeListener(listener);
+        
         this.rows = rows;
         this.columns = columns;
         
@@ -56,6 +58,13 @@ public class Board {
                 adjacentMineCount[row][column] = countNeighbors(row, column);
             }
         }
+        
+        gameState = GameState.IN_GAME;
+        propertyChangeSupport.firePropertyChange("gameState", null, GameState.IN_GAME);
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 
     private int countNeighbors(int row, int column) {
@@ -99,6 +108,9 @@ public class Board {
 
         // If the current cell is not a mine and has no adjacent mines, reveal adjacent cells
         if (cell==Cell.NEIGHBORS_0) revealNeighbors(row, column);
+
+        // If the current cell is a mine, end the game
+        else if (cell==Cell.MINE) lose();
     }
 
     private void revealNeighbors(int row, int column) {
@@ -127,12 +139,39 @@ public class Board {
         }
     }
 
+    private void revealWholeBoard() {
+        for (int row=0; row<rows; row++) {
+            for (int column=0; column<columns; column++) {
+                if (knownCells[row][column] != Cell.HIDDEN && knownCells[row][column] != Cell.FLAGGED) continue;
+                
+                Cell previousCell = knownCells[row][column];
+
+                Cell cell;
+                if (mines[row][column]) cell = Cell.MINE;
+                else if (previousCell==Cell.FLAGGED && !mines[row][column]) cell = Cell.FALSE_FLAG;
+                else cell = COUNT_TO_CONTENTS[adjacentMineCount[row][column]];
+
+                knownCells[row][column] = cell;
+                propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, previousCell, cell);
+            }
+        }
+    }
+
+    private void lose() {
+        gameState = GameState.DEFEAT;
+        propertyChangeSupport.firePropertyChange("gameState", GameState.IN_GAME, GameState.DEFEAT);
+        revealWholeBoard();
+    }
+
     public void toggleFlag(int row, int column) {
         if (knownCells[row][column] == Cell.HIDDEN) flag(row, column);
         else if (knownCells[row][column] == Cell.FLAGGED) unflag(row, column);
     }
 
     private void flag(int row, int column) {
+        // Prevent placing more flags than there are mines
+        if (minesRemaining==0) return;
+
         knownCells[row][column] = Cell.FLAGGED;
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, Cell.FLAGGED);
         setMinesRemaining(minesRemaining-1);
@@ -149,7 +188,20 @@ public class Board {
         minesRemaining = n;
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
+    public void checkVictory() {
+        // Check if the game is already over, or if there are flags left to place
+        if (minesRemaining>0) return;
+        if (gameState != GameState.IN_GAME) return;
+
+        // Check if there are hidden cells
+        for (int row=0; row<rows; row++) {
+            for (int column=0; column<columns; column++) {
+                if (knownCells[row][column]==Cell.HIDDEN) return;
+            }
+        }
+
+        // Otherwise, the board has been completed
+        gameState = GameState.VICTORY;
+        propertyChangeSupport.firePropertyChange("gameState", GameState.IN_GAME, GameState.VICTORY);
     }
 }
