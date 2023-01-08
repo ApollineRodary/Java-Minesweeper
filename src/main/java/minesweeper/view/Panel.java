@@ -2,7 +2,6 @@ package minesweeper.view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.Arrays;
 
 import javax.swing.JPanel;
 
@@ -18,11 +17,12 @@ public class Panel extends JPanel {
     private Cell[][] contents;
 
     public Panel(int rows, int columns) {
+        setPreferredSize(new Dimension(Panel.CELL_WIDTH*columns, Panel.CELL_HEIGHT*rows));
+
         this.rows = rows;
         this.columns = columns;
         contents = new Cell[rows][columns];
-        for(int i=0; i<rows; i++) Arrays.fill(contents[i], Cell.HIDDEN);
-        setPreferredSize(new Dimension(Panel.CELL_WIDTH*this.columns, Panel.CELL_HEIGHT*this.rows));
+        reset();
     }
 
     public void setContents(Cell contents, int pos) {
@@ -39,6 +39,15 @@ public class Panel extends JPanel {
             for (int j=0; j<row.length; j++) {
                 Cell cell = row[j];
                 g.drawImage(ImageLibrary.getImage(cell), (j*CELL_WIDTH), (i*CELL_HEIGHT), this);
+            }
+        }
+    }
+
+    public void reset() {
+        for (int row=0; row<rows; row++) {
+            for (int column=0; column<columns; column++) {
+                contents[row][column] = Cell.HIDDEN;
+                repaint();
             }
         }
     }

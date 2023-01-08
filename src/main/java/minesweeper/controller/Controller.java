@@ -1,30 +1,36 @@
 package minesweeper.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import minesweeper.model.Board;
 import minesweeper.model.Model;
 import minesweeper.view.Frame;
 import minesweeper.view.Panel;
 import minesweeper.view.View;
 
-public class Controller implements MouseListener {
-    Model model;
+public class Controller implements MouseListener, ActionListener {
+    private Model model;
+    private View view;
+
+    private static int rows = 20;
+    private static int columns = 20;
+    private static int mines = 30;
 
     public static void start() {
-        int rows = 20;
-        int columns = 20;
-        int mines = 30;
+        View view = new View(new Frame(rows, columns));
+        Model model = new Model();
+        model.startGame(rows, columns, mines);
 
-        Frame frame = new Frame(rows, columns);
-        Board board = new Board(rows, columns, mines);
-        new Controller(new View(frame), new Model(board));
+        new Controller(view, model);
     }
 
     private Controller(View view, Model model) {
         this.model = model;
+        this.view = view;
         view.getFrame().getPanel().addMouseListener(this);
+        view.getFrame().getRestartButton().addActionListener(this);
         model.getBoard().addPropertyChangeListener(view);
     }
 
@@ -55,4 +61,13 @@ public class Controller implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == view.getFrame().getRestartButton()) {
+            model.startGame(rows, columns, mines);
+            model.getBoard().addPropertyChangeListener(view);
+            view.getFrame().getPanel().reset();
+        }
+    }
 }

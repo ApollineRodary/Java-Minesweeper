@@ -28,7 +28,7 @@ public class ImageLibrary {
     );
 
     private static final Map<String, Image> IMAGES = Map.ofEntries(
-        Map.entry("restart_button", loadImage("textures/ui/restart_button.png"))
+        Map.entry("restart_button", loadImage("textures/ui/restart_button.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST))
     );
 
     private static final Map<Integer, Image> NUM_IMAGES = Map.ofEntries(

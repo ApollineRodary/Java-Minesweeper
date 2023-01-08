@@ -1,20 +1,42 @@
 package minesweeper.view;
 
 import javax.swing.BoxLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class Frame extends JFrame {
     private Panel panel;
     private Counter mineCounter;
+    private RestartButton restartButton;
 
     public Frame(int rows, int columns) {
         setTitle("Minesweeper");
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        mineCounter = new Counter();
-        add(mineCounter);
+        // Top bar for mine counter and restart button
+        JPanel topBar = new JPanel();
+        topBar.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        add(topBar);
 
+        mineCounter = new Counter();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.5;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        topBar.add(mineCounter, gbc);
+
+        restartButton = new RestartButton();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.5;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        topBar.add(restartButton);
+
+        // Main panel
         panel = new Panel(rows, columns);
         add(panel);
 
@@ -30,5 +52,9 @@ public class Frame extends JFrame {
 
     public Counter getMineCounter() {
         return mineCounter;
+    }
+
+    public RestartButton getRestartButton() {
+        return restartButton;
     }
 }

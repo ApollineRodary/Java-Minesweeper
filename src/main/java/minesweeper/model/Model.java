@@ -1,10 +1,10 @@
 package minesweeper.model;
 
 public class Model {
-    Board board;
+    private Board board;
 
-    public Model(Board board) {
-        this.board = board;
+    public void startGame(int rows, int columns, int mines) {
+        board = new Board(rows, columns, mines);
     }
 
     public Board getBoard() {

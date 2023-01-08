@@ -8,7 +8,7 @@ import minesweeper.model.Cell;
 
 public class View implements PropertyChangeListener {
     private Frame frame;
-
+    
     public View(Frame frame) {
         this.frame = frame;
     }

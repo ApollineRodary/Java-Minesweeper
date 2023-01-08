@@ -5,12 +5,11 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 
 public class Counter extends JPanel {
-    private static final int DIGIT_WIDTH = 30;
-    private static final int DIGIT_HEIGHT = 50;
+    protected static final int DIGIT_WIDTH = 30;
+    protected static final int DIGIT_HEIGHT = 50;
     private int value = 0;
 
     public Counter() {
-        super();
         setPreferredSize(new Dimension(DIGIT_WIDTH*3, DIGIT_HEIGHT));
         setValue(0);
     }
