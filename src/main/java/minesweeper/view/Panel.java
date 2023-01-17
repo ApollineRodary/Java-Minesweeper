@@ -11,18 +11,14 @@ public class Panel extends JPanel {
     public static final int CELL_WIDTH = 25;
     public static final int CELL_HEIGHT = 25;
     
-    private final int rows;
-    private final int columns;
+    @SuppressWarnings("unused")
+    private int rows;
+    private int columns;
 
     private Cell[][] contents;
 
     public Panel(int rows, int columns) {
-        setPreferredSize(new Dimension(Panel.CELL_WIDTH*columns, Panel.CELL_HEIGHT*rows));
-
-        this.rows = rows;
-        this.columns = columns;
-        contents = new Cell[rows][columns];
-        reset();
+        reset(rows, columns);
     }
 
     public void setContents(Cell contents, int pos) {
@@ -43,7 +39,13 @@ public class Panel extends JPanel {
         }
     }
 
-    public void reset() {
+    public void reset(int rows, int columns) {
+        this.rows = rows;
+        this.columns = columns;
+        
+        setPreferredSize(new Dimension(Panel.CELL_WIDTH*columns, Panel.CELL_HEIGHT*rows));
+        revalidate();
+        contents = new Cell[rows][columns];
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
                 contents[row][column] = Cell.HIDDEN;

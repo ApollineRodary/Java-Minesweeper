@@ -20,6 +20,13 @@ public class Controller implements MouseListener, ActionListener {
     private static int columns = 20;
     private static int mines = 30;
 
+    public final static int MIN_ROWS = 5;
+    public final static int MAX_ROWS = 40;
+    public final static int MIN_COLUMNS = 5;
+    public final static int MAX_COLUMNS = 60;
+    public final static int MIN_MINES = 5;
+    public final static int MAX_MINES = 200;
+
     public static void start() {
         View view = new View(new Frame(rows, columns));
         Model model = new Model();
@@ -28,7 +35,8 @@ public class Controller implements MouseListener, ActionListener {
 
     public void restart() {
         model.startGame(rows, columns, mines, view);
-        view.getFrame().getPanel().reset();
+        view.getFrame().getPanel().reset(rows, columns);
+        view.getFrame().pack();
     }
 
     private Controller(View view, Model model) {
