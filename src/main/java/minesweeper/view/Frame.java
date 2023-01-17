@@ -50,6 +50,7 @@ public class Frame extends JFrame {
 
         setLocationRelativeTo(null);
         pack();
+        setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);;
     }
