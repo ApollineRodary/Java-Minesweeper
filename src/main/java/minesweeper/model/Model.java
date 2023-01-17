@@ -1,12 +1,15 @@
 package minesweeper.model;
 
 import java.beans.PropertyChangeListener;
+import java.util.Map;
+
+import minesweeper.controller.Option;
 
 public class Model {
     private Board board;
 
-    public void startGame(int rows, int columns, int mines, boolean isHardcore, PropertyChangeListener listener) {
-        board = new Board(rows, columns, mines, isHardcore, listener);
+    public void startGame(Map<Option, Object> options, PropertyChangeListener listener) {
+        board = new Board(options, listener);
     }
 
     public Board getBoard() {

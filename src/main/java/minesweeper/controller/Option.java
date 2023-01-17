@@ -4,5 +4,7 @@ public enum Option {
     MINES,
     ROWS,
     COLUMNS,
-    HARDCORE_MODE
+    HARDCORE_MODE,
+    MULTIPLAYER_MODE,
+    PLAYERS
 }

@@ -5,7 +5,10 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import minesweeper.controller.Option;
 
 public class Board {
     private final PropertyChangeSupport propertyChangeSupport;
@@ -20,13 +23,14 @@ public class Board {
     private GameState gameState;
     private int minesRemaining;
 
-    public Board(int rows, int columns, int mines, boolean isHardcore, PropertyChangeListener listener) {
+    public Board(Map<Option, Object> options, PropertyChangeListener listener) {
         propertyChangeSupport = new PropertyChangeSupport(this);
         propertyChangeSupport.addPropertyChangeListener(listener);
         
-        this.rows = rows;
-        this.columns = columns;
-        this.isHardcore = isHardcore;
+        rows = (int) options.get(Option.ROWS);
+        columns = (int) options.get(Option.COLUMNS);
+        isHardcore = (boolean) options.get(Option.HARDCORE_MODE);
+        int mineCount = (int) options.get(Option.MINES);
         
         // Initialise known cells
         knownCells = new Cell[rows][columns];
@@ -37,7 +41,7 @@ public class Board {
         }
 
         // Generate random mines
-        this.mines = new boolean[rows][columns];
+        mines = new boolean[rows][columns];
         List<int[]> positionCandidates = new ArrayList<>();
         for (int i=0; i<rows; i++) {
             for (int j=0; j<columns; j++) {
@@ -45,13 +49,13 @@ public class Board {
             }
         }
         Collections.shuffle(positionCandidates, new Random());
-        List<int[]> minePositions = positionCandidates.subList(0, mines);
+        List<int[]> minePositions = positionCandidates.subList(0, mineCount);
         for (int[] minePosition: minePositions) {
             int row = minePosition[0];
             int column = minePosition[1];
-            this.mines[row][column] = true;
+            mines[row][column] = true;
         }
-        setMinesRemaining(mines);
+        setMinesRemaining(mineCount);
 
         // Count neighbors for each cell
         adjacentMineCount = new int[rows][columns];

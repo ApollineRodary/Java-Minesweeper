@@ -21,6 +21,8 @@ public class Controller implements MouseListener, ActionListener {
     private static int columns = 20;
     private static int mines = 30;
     private static boolean isHardcore = false;
+    private static boolean isMultiplayer = false;
+    private static int players = 1;
 
     public final static int MIN_ROWS = 5;
     public final static int MAX_ROWS = 40;
@@ -30,6 +32,8 @@ public class Controller implements MouseListener, ActionListener {
     public final static int MAX_MINES = 200;
     public final static double HARDCORE_MODE_MIN_MINE_DENSITY = 0.15;
     public final static double HARDCORE_MODE_MAX_MINE_DENSITY = 0.30;
+    public final static int MULTIPLAYER_MIN_PLAYERS = 2;
+    public final static int MULTIPLAYER_MAX_PLAYERS = 10;
 
     public static void start() {
         View view = new View(new Frame(rows, columns, isHardcore));
@@ -41,7 +45,7 @@ public class Controller implements MouseListener, ActionListener {
         if (isHardcore) {
             mines = hardcoreMineCount();
         }
-        model.startGame(rows, columns, mines, isHardcore, view);
+        model.startGame(getOptions(), view);
         view.getFrame().getPanel().reset(rows, columns);
         view.getFrame().getMineCounter().setEnabled(!isHardcore);
         view.getFrame().pack();
@@ -50,7 +54,7 @@ public class Controller implements MouseListener, ActionListener {
     private Controller(View view, Model model) {
         this.model = model;
         this.view = view;
-        model.startGame(rows, columns, mines, isHardcore, view);
+        model.startGame(getOptions(), view);
         view.getFrame().getPanel().addMouseListener(this);
         view.getFrame().getRestartButton().addActionListener(this);
         view.getFrame().getOptionsButton().addActionListener(this);
@@ -100,11 +104,13 @@ public class Controller implements MouseListener, ActionListener {
                 // If the operation was canceled by the user, do not start a new game
                 return;
             }
-
-            isHardcore = (boolean) options.get(Option.HARDCORE_MODE);
+            
             rows = (int) options.get(Option.ROWS);
             columns = (int) options.get(Option.COLUMNS);
             mines = (int) options.get(Option.MINES);
+            isHardcore = (boolean) options.get(Option.HARDCORE_MODE);
+            isMultiplayer = (boolean) options.get(Option.MULTIPLAYER_MODE);
+            players = isMultiplayer?((int) options.get(Option.PLAYERS)):1;
 
             restart();
         }
@@ -114,5 +120,16 @@ public class Controller implements MouseListener, ActionListener {
         int minMines = (int) (rows*columns*HARDCORE_MODE_MIN_MINE_DENSITY);
         int maxMines = (int) (rows*columns*HARDCORE_MODE_MAX_MINE_DENSITY);
         return new Random().nextInt(minMines, maxMines);
+    }
+
+    private Map<Option, Object> getOptions() {
+        return Map.ofEntries(
+            Map.entry(Option.ROWS, rows),
+            Map.entry(Option.COLUMNS, columns),
+            Map.entry(Option.MINES, mines),
+            Map.entry(Option.HARDCORE_MODE, isHardcore),
+            Map.entry(Option.MULTIPLAYER_MODE, isMultiplayer),
+            Map.entry(Option.PLAYERS, players)
+        );
     }
 }
