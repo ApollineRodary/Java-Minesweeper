@@ -13,7 +13,7 @@ public class Frame extends JFrame {
     private RestartButton restartButton;
     private OptionsButton optionsButton;
 
-    public Frame(int rows, int columns) {
+    public Frame(int rows, int columns, boolean isHardcore) {
         setTitle("Minesweeper");
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -23,7 +23,7 @@ public class Frame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         add(topBar);
 
-        mineCounter = new Counter();
+        mineCounter = new Counter(!isHardcore);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 0.5;
         gbc.gridx = 0;

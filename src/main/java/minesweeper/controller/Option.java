@@ -3,5 +3,6 @@ package minesweeper.controller;
 public enum Option {
     MINES,
     ROWS,
-    COLUMNS
+    COLUMNS,
+    HARDCORE_MODE
 }

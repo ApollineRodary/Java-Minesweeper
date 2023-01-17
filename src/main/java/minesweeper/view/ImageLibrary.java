@@ -32,7 +32,8 @@ public class ImageLibrary {
         Map.entry("restart_button", loadImage("textures/ui/restart_button.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST)),
         Map.entry("restart_button_defeat", loadImage("textures/ui/restart_button_defeat.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST)),
         Map.entry("restart_button_victory", loadImage("textures/ui/restart_button_victory.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST)),
-        Map.entry("options_button", loadImage("textures/ui/options_button.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST))
+        Map.entry("options_button", loadImage("textures/ui/options_button.png").getScaledInstance(Counter.DIGIT_HEIGHT, Counter.DIGIT_HEIGHT, Image.SCALE_FAST)),
+        Map.entry("counter_off", loadImage("textures/number/off.png"))
     );
 
     private static final Map<Integer, Image> NUM_IMAGES = Map.ofEntries(

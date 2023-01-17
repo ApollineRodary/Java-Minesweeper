@@ -16,15 +16,17 @@ public class Board {
     private final int[][] adjacentMineCount;
     public final int rows;
     public final int columns;
+    public final boolean isHardcore;
     private GameState gameState;
     private int minesRemaining;
 
-    public Board(int rows, int columns, int mines, PropertyChangeListener listener) {
+    public Board(int rows, int columns, int mines, boolean isHardcore, PropertyChangeListener listener) {
         propertyChangeSupport = new PropertyChangeSupport(this);
         propertyChangeSupport.addPropertyChangeListener(listener);
         
         this.rows = rows;
         this.columns = columns;
+        this.isHardcore = isHardcore;
         
         // Initialise known cells
         knownCells = new Cell[rows][columns];
@@ -169,8 +171,8 @@ public class Board {
     }
 
     private void flag(int row, int column) {
-        // Prevent placing more flags than there are mines
-        if (minesRemaining==0) return;
+        // Prevent placing more flags than there are mines, if the mine counter is known
+        if (!isHardcore && minesRemaining==0) return;
 
         knownCells[row][column] = Cell.FLAGGED;
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, Cell.FLAGGED);
@@ -184,7 +186,9 @@ public class Board {
     }
 
     private void setMinesRemaining(int n) {
-        propertyChangeSupport.firePropertyChange("minesRemaining", minesRemaining, n);
+        if (!isHardcore) {
+            propertyChangeSupport.firePropertyChange("minesRemaining", minesRemaining, n);
+        }
         minesRemaining = n;
     }
 
