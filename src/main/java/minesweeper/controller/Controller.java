@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Map;
 
 import minesweeper.model.GameState;
 import minesweeper.model.Model;
@@ -25,12 +26,18 @@ public class Controller implements MouseListener, ActionListener {
         new Controller(view, model);
     }
 
+    public void restart() {
+        model.startGame(rows, columns, mines, view);
+        view.getFrame().getPanel().reset();
+    }
+
     private Controller(View view, Model model) {
         this.model = model;
         this.view = view;
         model.startGame(rows, columns, mines, view);
         view.getFrame().getPanel().addMouseListener(this);
         view.getFrame().getRestartButton().addActionListener(this);
+        view.getFrame().getOptionsButton().addActionListener(this);
     }
 
     @Override
@@ -68,8 +75,17 @@ public class Controller implements MouseListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.getFrame().getRestartButton()) {
-            model.startGame(rows, columns, mines, view);
-            view.getFrame().getPanel().reset();
+            restart();
+        } else if (e.getSource() == view.getFrame().getOptionsButton()) {
+            Map<Option, Integer> options = view.openOptions(mines, rows, columns);
+            if (options == null) {
+                // If the operation was canceled by the user, do not start a new game
+                return;
+            }
+            mines = options.get(Option.MINES);
+            rows = options.get(Option.ROWS);
+            columns = options.get(Option.COLUMNS);
+            restart();
         }
     }
 }

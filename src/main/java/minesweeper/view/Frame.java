@@ -11,6 +11,7 @@ public class Frame extends JFrame {
     private Panel panel;
     private Counter mineCounter;
     private RestartButton restartButton;
+    private OptionsButton optionsButton;
 
     public Frame(int rows, int columns) {
         setTitle("Minesweeper");
@@ -29,10 +30,17 @@ public class Frame extends JFrame {
         gbc.gridy = 0;
         topBar.add(mineCounter, gbc);
 
+        optionsButton = new OptionsButton();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        topBar.add(optionsButton, gbc);
+
         restartButton = new RestartButton();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.5;
-        gbc.gridx = 1;
+        gbc.weightx = 0.25;
+        gbc.gridx = 2;
         gbc.gridy = 0;
         topBar.add(restartButton);
 
@@ -56,5 +64,9 @@ public class Frame extends JFrame {
 
     public RestartButton getRestartButton() {
         return restartButton;
+    }
+
+    public OptionsButton getOptionsButton() {
+        return optionsButton;
     }
 }

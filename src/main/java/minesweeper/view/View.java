@@ -3,9 +3,11 @@ package minesweeper.view;
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import minesweeper.controller.Option;
 import minesweeper.model.Cell;
 import minesweeper.model.GameState;
 
@@ -63,5 +65,20 @@ public class View implements PropertyChangeListener {
 
     private void announceVictory() {
         JOptionPane.showMessageDialog(frame, "You win!", "Victory", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public Map<Option, Integer> openOptions(int mines, int rows, int columns) {
+        int option = JOptionPane.showConfirmDialog(getFrame(), "Placeholder", "Options", JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == JOptionPane.OK_OPTION) {
+            // Placeholder: return defaults sent as arguments
+            return Map.ofEntries(
+                Map.entry(Option.MINES, mines),
+                Map.entry(Option.ROWS, rows),
+                Map.entry(Option.COLUMNS, columns)
+            );
+        } else {
+            return null;
+        }
     }
 }
