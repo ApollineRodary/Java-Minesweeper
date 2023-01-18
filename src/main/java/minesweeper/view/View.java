@@ -20,6 +20,18 @@ public class View implements PropertyChangeListener {
     public Frame getFrame() {
         return frame;
     }
+
+    public void startGame(Map<Option, Object> options) {
+        frame.getPanel().reset((int) options.get(Option.ROWS), (int) options.get(Option.COLUMNS));
+        frame.getMineCounter().setEnabled(!(boolean) options.get(Option.HARDCORE_MODE));
+        if ((boolean) options.get(Option.MULTIPLAYER_MODE)) {
+            frame.addPlayerLabel();
+            frame.getPlayerLabel().setValue(0);
+        } else {
+            frame.removePlayerLabel();
+        }
+        frame.pack();
+    }
     
     @Override
     public void propertyChange(PropertyChangeEvent e) {
@@ -48,6 +60,11 @@ public class View implements PropertyChangeListener {
             case "minesRemaining":
                 frame.getMineCounter().setValue((int) e.getNewValue());
                 break;
+
+            case "currentPlayer":
+                    int player = (int) e.getNewValue();
+                    frame.getPlayerLabel().setValue(player);
+                    break;
             
             case "gameState":
                 GameState state = (GameState) e.getNewValue();
