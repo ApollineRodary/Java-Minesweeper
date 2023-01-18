@@ -1,6 +1,6 @@
 # Java-Minesweeper
 
-A minimal Minesweeper in Java and Swing made as a project for the Prog1 programming course for L3 students at ENS de Lyon and inspired by the original Windows XP app.
+A minimal Minesweeper in Java and Swing made as a project for the Prog1 programming course for L3 students at ENS de Lyon and inspired by the original Windows 98 app.
 
 ## Features
 
@@ -16,7 +16,7 @@ The number of mines is randomly selected uniformly between 15% and 30% coverage 
 
 ## Versions
 
-Features contained in every release version correspond to the different implementation steps required per the programming course. `v1.x` versions implement basic functionality, `v2.x` versions implement customization options, and `v3.x` versions implement multiplayer gameplay.
+Features contained in every release version correspond to the different implementation steps required by the programming course. `v1.x` versions implement basic functionality, `v2.x` versions implement customization options, and `v3.x` versions implement offline multiplayer gameplay.
 
 ## Gallery
 
