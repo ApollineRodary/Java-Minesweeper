@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import minesweeper.controller.Controller;
 import minesweeper.controller.Option;
 import minesweeper.model.Cell;
 import minesweeper.model.GameState;
@@ -21,6 +22,7 @@ public class View {
     }
 
     public void startGame(Map<Option, Object> options) {
+        /* Updates the view at the beginning of a game */
         frame.getPanel().reset((int) options.get(Option.ROWS), (int) options.get(Option.COLUMNS));
         frame.getMineCounter().setEnabled(!(boolean) options.get(Option.HARDCORE_MODE));
         if ((boolean) options.get(Option.MULTIPLAYER_MODE)) {
@@ -30,6 +32,13 @@ public class View {
             frame.removePlayerLabel();
         }
         frame.pack();
+    }
+
+    public void addListener(Controller controller) {
+        /* Sets controller as listener for interactions with buttons and with the panel */
+        frame.getPanel().addMouseListener(controller);
+        frame.getRestartButton().addActionListener(controller);
+        frame.getOptionsButton().addActionListener(controller);
     }
 
     public void updateKnownCells(Cell cell, int row, int column) {

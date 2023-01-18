@@ -11,6 +11,7 @@ public class Model {
     private boolean isMultiplayer;
 
     public void startGame(Map<Option, Object> options, PropertyChangeListener listener) {
+        /* Creates a new board and starts a new game */
         board = new Board(options, listener);
         isMultiplayer = (boolean) options.get(Option.MULTIPLAYER_MODE);
         if (isMultiplayer) {

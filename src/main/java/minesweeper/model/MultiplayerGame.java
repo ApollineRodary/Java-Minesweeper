@@ -19,6 +19,7 @@ public class MultiplayerGame {
     }
 
     public void nextPlayer() {
+        /* Updates the current player */
         int newPlayer = currentPlayer;
         newPlayer++;
         if (newPlayer==players) {

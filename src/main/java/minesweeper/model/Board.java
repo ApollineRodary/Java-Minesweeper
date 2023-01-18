@@ -77,6 +77,7 @@ public class Board {
     }
 
     private int countNeighbors(int row, int column) {
+        /* Returns the number of mines surrounding a cell */
         int count=0;
 
         int startRow = Math.max(0, row-1);
@@ -93,7 +94,7 @@ public class Board {
     }
 
     public void reveal(int row, int column) {
-        /* Reveal an individual cell */
+        /* Reveals an individual cell */
 
         // If the cell is flagged, unflag and exit
         if (knownCells[row][column] == Cell.FLAGGED) {
@@ -123,7 +124,7 @@ public class Board {
     }
 
     private void revealNeighbors(int row, int column) {
-        /* Reveal cells adjacent to the current cell */
+        /* Reveals cells adjacent to the current cell */
 
         // Get list of positions of adjacent cells
         List <int[]> neighborPositions = new ArrayList<>();
@@ -149,6 +150,8 @@ public class Board {
     }
 
     private void revealWholeBoard() {
+        /* Reveals the whole board upon defeat */
+
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
                 if (knownCells[row][column] != Cell.HIDDEN && knownCells[row][column] != Cell.FLAGGED) continue;
@@ -167,17 +170,21 @@ public class Board {
     }
 
     private void lose() {
+        /* Reveals the whole board and prevents further interactions with the board */
         gameState = GameState.DEFEAT;
         revealWholeBoard();
         propertyChangeSupport.firePropertyChange("gameState", GameState.IN_GAME, GameState.DEFEAT);
     }
 
     public void toggleFlag(int row, int column, int player) {
+        /* Flags the current cell if it is hidden, unflags it if it is already flagged */
         if (knownCells[row][column] == Cell.HIDDEN) flag(row, column, player);
         else if (knownCells[row][column] == Cell.FLAGGED) unflag(row, column);
     }
 
     private void flag(int row, int column, int player) {
+        /* Flags the current cell, and saves the player who placed the flag */
+
         // Prevent placing more flags than there are mines, if the mine counter is known
         if (!isHardcore && minesRemaining==0) return;
 
@@ -191,6 +198,7 @@ public class Board {
     }
     
     private void unflag(int row, int column) {
+        /* Unflags the current cell */
         knownCells[row][column] = Cell.HIDDEN;
         flagPlacers[row][column] = -1;
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.FLAGGED, Cell.HIDDEN);
@@ -198,10 +206,14 @@ public class Board {
     }
 
     public int getFlagPlacer(int row, int column) {
+        /* Returns the ID of the player who placed the flag at the current cell
+         * Returns -1 if the current cell is not flagged
+         */
         return flagPlacers[row][column];
     }
 
     private void setMinesRemaining(int n) {
+        /* Updates the number of mines the player can place */
         if (!isHardcore) {
             propertyChangeSupport.firePropertyChange("minesRemaining", minesRemaining, n);
         }
@@ -209,6 +221,8 @@ public class Board {
     }
 
     public void checkVictory() {
+        /* Checks if the board is fully revealed, and if so notifies the controller and prevents further interactions with the board */
+
         // Check if the game is already over, or if there are flags left to place
         if (minesRemaining>0) return;
         if (gameState != GameState.IN_GAME) return;

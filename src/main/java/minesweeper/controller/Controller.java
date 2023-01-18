@@ -43,6 +43,7 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
     public final static int SCORE_ON_CORRECT_FLAG = 5;
 
     public static void start() {
+        /* Starts the application, creates a new model and a new view */
         View view = new View(getOptions());
         Model model = new Model();
         new Controller(view, model);
@@ -52,12 +53,11 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
         this.model = model;
         this.view = view;
         model.startGame(getOptions(), this);
-        view.getFrame().getPanel().addMouseListener(this);
-        view.getFrame().getRestartButton().addActionListener(this);
-        view.getFrame().getOptionsButton().addActionListener(this);
+        view.addListener(this);
     }
 
     public void play() {
+        /* Fired at each interaction by a player, checks for victory and updates the current player in multiplayer */
         model.getBoard().checkVictory();
         if (model.getIsMultiplayer()) {
             model.getMultiplayerGame().nextPlayer();
@@ -65,6 +65,7 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
     }
 
     public void restart() {
+        /* Resets view and creates a new game */
         if (isHardcore) {
             mines = hardcoreMineCount();
         }
@@ -73,6 +74,7 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
     }
 
     private static int hardcoreMineCount() {
+        /* Generates a random number of mines in hardcore mode */
         int minMines = (int) (rows*columns*HARDCORE_MODE_MIN_MINE_DENSITY);
         int maxMines = (int) (rows*columns*HARDCORE_MODE_MAX_MINE_DENSITY);
         return new Random().nextInt(minMines, maxMines);
@@ -89,6 +91,7 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
         );
     }
 
+    /* Interactions with the main panel */
     @Override
     public void mouseClicked(MouseEvent e) {}
     
@@ -122,6 +125,8 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
     @Override
     public void mouseReleased(MouseEvent e) {}
 
+    /* Interactions with buttons */
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.getFrame().getRestartButton()) {
@@ -146,6 +151,8 @@ public class Controller implements MouseListener, ActionListener, PropertyChange
         }
     }
     
+    /* Notifications from the model */
+
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         switch (e.getPropertyName()) {
