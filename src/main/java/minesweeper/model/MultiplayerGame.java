@@ -6,6 +6,7 @@ import java.beans.PropertyChangeSupport;
 public class MultiplayerGame {
     private final PropertyChangeSupport propertyChangeSupport;
     private final int players;
+    private Scoreboard scoreboard;
     private int currentPlayer;
 
     public MultiplayerGame(int players, PropertyChangeListener listener) {
@@ -13,6 +14,8 @@ public class MultiplayerGame {
         propertyChangeSupport.addPropertyChangeListener(listener);
         this.players = players;
         currentPlayer = 0;
+        
+        scoreboard = new Scoreboard(players);
     }
 
     public void nextPlayer() {
@@ -27,5 +30,9 @@ public class MultiplayerGame {
 
     public int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public Scoreboard getScoreboard() {
+        return scoreboard;
     }
 }

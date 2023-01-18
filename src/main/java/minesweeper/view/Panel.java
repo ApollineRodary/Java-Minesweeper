@@ -10,10 +10,6 @@ import minesweeper.model.Cell;
 public class Panel extends JPanel {
     public static final int CELL_WIDTH = 25;
     public static final int CELL_HEIGHT = 25;
-    
-    @SuppressWarnings("unused")
-    private int rows;
-    private int columns;
 
     private Cell[][] contents;
 
@@ -21,9 +17,7 @@ public class Panel extends JPanel {
         reset(rows, columns);
     }
 
-    public void setContents(Cell contents, int pos) {
-        int row = pos/columns;
-        int column = pos%columns;
+    public void setContents(Cell contents, int row, int column) {
         this.contents[row][column] = contents;
     }
 
@@ -40,9 +34,6 @@ public class Panel extends JPanel {
     }
 
     public void reset(int rows, int columns) {
-        this.rows = rows;
-        this.columns = columns;
-        
         setPreferredSize(new Dimension(Panel.CELL_WIDTH*columns, Panel.CELL_HEIGHT*rows));
         revalidate();
         contents = new Cell[rows][columns];

@@ -14,14 +14,15 @@ public class Board {
     private final PropertyChangeSupport propertyChangeSupport;
     private static final Cell[] COUNT_TO_CONTENTS = {Cell.NEIGHBORS_0, Cell.NEIGHBORS_1, Cell.NEIGHBORS_2, Cell.NEIGHBORS_3, Cell.NEIGHBORS_4, Cell.NEIGHBORS_5, Cell.NEIGHBORS_6, Cell.NEIGHBORS_7, Cell.NEIGHBORS_8};
     
-    private final Cell[][] knownCells;
-    private final boolean[][] mines;
-    private final int[][] adjacentMineCount;
+    private final Cell[][] knownCells;          // The contents of cells discovered by the player
+    private final boolean[][] mines;            // Where the mines are
+    private final int[][] adjacentMineCount;    // How many mines are adjacent to each cell
+    private final int[][] flagPlacers;          // Which player placed each flag: -1 if no flag has been placed or if the flag is misplaced
     public final int rows;
     public final int columns;
     public final boolean isHardcore;
     private GameState gameState;
-    private int minesRemaining;
+    private int minesRemaining;                 // How many more flags can be placed
 
     public Board(Map<Option, Object> options, PropertyChangeListener listener) {
         propertyChangeSupport = new PropertyChangeSupport(this);
@@ -34,9 +35,11 @@ public class Board {
         
         // Initialise known cells
         knownCells = new Cell[rows][columns];
+        flagPlacers = new int[rows][columns];
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
                 knownCells[row][column] = Cell.HIDDEN;
+                flagPlacers[row][column] = -1;
             }
         }
 
@@ -88,7 +91,7 @@ public class Board {
         }
         return count;
     }
-    
+
     public void reveal(int row, int column) {
         /* Reveal an individual cell */
 
@@ -109,7 +112,7 @@ public class Board {
         // Update known cell contents
         knownCells[row][column] = cell;
         
-        // Notify frame
+        // Notify controller
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, cell);
 
         // If the current cell is not a mine and has no adjacent mines, reveal adjacent cells
@@ -165,28 +168,37 @@ public class Board {
 
     private void lose() {
         gameState = GameState.DEFEAT;
-        propertyChangeSupport.firePropertyChange("gameState", GameState.IN_GAME, GameState.DEFEAT);
         revealWholeBoard();
+        propertyChangeSupport.firePropertyChange("gameState", GameState.IN_GAME, GameState.DEFEAT);
     }
 
-    public void toggleFlag(int row, int column) {
-        if (knownCells[row][column] == Cell.HIDDEN) flag(row, column);
+    public void toggleFlag(int row, int column, int player) {
+        if (knownCells[row][column] == Cell.HIDDEN) flag(row, column, player);
         else if (knownCells[row][column] == Cell.FLAGGED) unflag(row, column);
     }
 
-    private void flag(int row, int column) {
+    private void flag(int row, int column, int player) {
         // Prevent placing more flags than there are mines, if the mine counter is known
         if (!isHardcore && minesRemaining==0) return;
 
         knownCells[row][column] = Cell.FLAGGED;
+
+        if (mines[row][column]) {
+            flagPlacers[row][column] = player;
+        }
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.HIDDEN, Cell.FLAGGED);
         setMinesRemaining(minesRemaining-1);
     }
     
     private void unflag(int row, int column) {
         knownCells[row][column] = Cell.HIDDEN;
+        flagPlacers[row][column] = -1;
         propertyChangeSupport.fireIndexedPropertyChange("knownCells", row*columns + column, Cell.FLAGGED, Cell.HIDDEN);
         setMinesRemaining(minesRemaining+1);
+    }
+
+    public int getFlagPlacer(int row, int column) {
+        return flagPlacers[row][column];
     }
 
     private void setMinesRemaining(int n) {
